@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- ✅ 快取連結預覽（請放在 <head> 裡） -->
+    <!-- 控制預覽卡片那行文字（很多平台會抓這個） -->
+    <meta name="description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+
+    <!-- ✅ LINE / FB 預覽用 -->
+    <meta property="og:title" content="Jessie Math - 圓環之城・自由挑戰">
+    <meta property="og:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <meta property="og:type" content="website">
+
+    <!-- ✅ 預覽圖片（把檔名換成你的主題圖，例如 g6-u7.png） -->
+    <meta property="og:image" content="g6-u7.png">
+    <meta property="og:image:width" content="1024">
+    <meta property="og:image:height" content="1536">
+    <meta property="og:image:alt" content="Jessie Math 遊戲封面">
+
+    <!-- ✅ 有些平台會參考 -->
+    <link rel="image_src" href="g6-u7.png">
+
+    <!-- ✅ Twitter / X（可用同一張圖） -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Jessie Math - 圓環之城・自由挑戰">
+    <meta name="twitter:description" content="© 2025–2026 Jessie Math 捷析老師. All rights reserved.">
+    <meta name="twitter:image" content="g6-u7.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessie Math - 圓環之城・自由挑戰</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #4a90e2;    /* L1 藍 */
+            --success: #2ecc71;    /* L2 綠 */
+            --warning: #f39c12;    /* L3 橘 */
+            --danger: #e74c3c;     /* L4 紅 */
+            --brand-yellow: #f1c40f; 
+            --dark: #2c3e50;
+            --light: #f8f9fa;
+            --header-h: 80px;
+        }
+
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif; 
+        }
+        body { 
+            background: var(--light); color: var(--dark); 
+            padding-top: var(--header-h); 
+        }
+
+        /* --- 1. Hero Header 區（照截圖版本） --- */
+        .hero-header {
+            position: fixed; top: 0; width: 100%; height: var(--header-h);
+            background: #ffffff; border-bottom: 1px solid #f0f0f0;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 30px; z-index: 1000;
+        }
+        
+        .brand-area { display: flex; align-items: center; gap: 15px; }
+        
+        .profile-circle {
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%;
+            background: url('JESSIEMATH-Q.png') no-repeat center center;
+            background-size: 85%;
+            background-color: transparent;
+            border: 3px solid var(--brand-yellow);
+            flex-shrink: 0;
+        }
+        
+        .brand-text { 
+            font-family: 'Fredoka One', cursive; 
+            font-size: 1.8rem; 
+            color: var(--dark); 
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+
+        .nav-btn {
+            text-decoration: none; padding: 10px 20px; border-radius: 999px;
+            font-weight: bold; font-size: 1rem; transition: 0.3s;
+            display: flex; align-items: center; gap: 8px;
+            border: 1px solid #ddd; color: #555; background: #ffffff;
+        }
+        .nav-btn:hover { 
+            background: #f8f9fa; border-color: #ccc; 
+            transform: translateY(-2px); 
+        }
+
+        .nav-btn-outline {
+            border: 1px solid var(--primary); 
+            color: var(--primary); 
+            background: #ffffff;
+        }
+        .nav-btn-outline:hover { background: #eff6ff; }
+
+        /* --- Container --- */
+        .container {
+            max-width: 900px; margin: 30px auto; padding: 20px;
+            background: white; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            min-height: 650px; position: relative;
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        /* --- Screens --- */
+        .screen { 
+            display: none; flex-grow: 1; flex-direction: column; 
+            align-items: center; text-align: center; 
+            animation: fadeIn 0.3s; width: 100%; 
+        }
+        .screen.active { display: flex; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* --- UI Components --- */
+        .btn {
+            padding: 12px 30px; border: none; border-radius: 50px;
+            font-size: 1.1rem; font-weight: bold; cursor: pointer;
+            transition: 0.2s; margin: 10px; color: white; background: var(--dark);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 10px rgba(0,0,0,0.15); }
+        .btn:active { transform: scale(0.96); }
+        
+        .input-box {
+            padding: 15px; border: 3px solid #eee; border-radius: 15px;
+            font-size: 1.8rem; width: 100%; max-width: 200px; text-align: center; 
+            outline: none; transition: 0.3s; font-weight: bold; color: var(--dark);
+        }
+        .input-box:focus { border-color: var(--primary); background: #fafdff; }
+        .input-box:disabled { background: #eee; cursor: not-allowed; }
+
+        /* --- Level Cards --- */
+        .level-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px; width: 100%; padding: 10px; margin-top: 20px;
+        }
+        .level-card {
+            background: white; border: 2px solid #eee; border-radius: 15px;
+            padding: 25px; cursor: pointer; transition: 0.3s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .level-card:hover { 
+            transform: translateY(-5px); border-color: var(--primary); 
+            box-shadow: 0 8px 20px rgba(74, 144, 226, 0.15); 
+        }
+        .level-card i { font-size: 3.5rem; margin-bottom: 15px; }
+        .level-card h3 { font-size: 1.2rem; margin-bottom: 5px; }
+        
+        /* --- Game HUD --- */
+        .hud {
+            width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;
+            background: #f8f9fa; border-radius: 15px; font-weight: bold; margin-bottom: 5px;
+            border: 1px solid #eee;
+        }
+        .hud-group { display: flex; gap: 25px; align-items: center; }
+        .hud-item { font-size: 1.5rem; display: flex; align-items: center; gap: 8px; }
+        .hud-combo { 
+            color: #ff0055; font-size: 1.3rem; font-style: italic; 
+            opacity: 0; transition: opacity 0.3s; transform: scale(0);
+        }
+        .hud-combo.show { 
+            opacity: 1; transform: scale(1); 
+            animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        @keyframes pop { 
+            0% { transform: scale(0.5); } 
+            50% { transform: scale(1.2); } 
+            100% { transform: scale(1); } 
+        }
+
+        .ctrl-btn {
+            background: white; border: 2px solid #ddd; width: 45px; height: 45px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+            color: #666; transition: 0.2s; font-size: 1.2rem;
+        }
+        .ctrl-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Timer Bar */
+        .timer-container { width: 100%; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
+        .timer-bar { height: 100%; background: var(--success); width: 100%; transition: width 1s linear; }
+
+        /* --- Visual Stage & Context Card --- */
+        .visual-stage { 
+            width: 100%; height: 280px; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            margin: 10px auto; position: relative;
+        }
+        
+        .context-tag {
+            position: absolute; top: 10px; right: 20px;
+            background: #fff; border: 2px solid #eee; padding: 5px 12px;
+            border-radius: 20px; color: #666; font-size: 0.9rem; font-weight: bold;
+            display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .shape-circle { 
+            width: 180px; height: 180px; border: 4px solid var(--primary); 
+            border-radius: 50%; position: relative; 
+            background: rgba(74, 144, 226, 0.05); 
+        }
+        .shape-sector {
+            width: 180px; height: 180px; border-radius: 50%;
+            background: conic-gradient(var(--fill-color) 0deg var(--angle), #f0f0f0 var(--angle) 360deg);
+            position: relative;
+        }
+        .shape-label { 
+            position: absolute; background: white; padding: 3px 8px; border-radius: 6px; 
+            font-size: 1rem; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid #eee;
+        }
+
+        /* --- Pause Overlay --- */
+        .pause-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px);
+            z-index: 50; display: none; 
+            flex-direction: column; justify-content: center; align-items: center;
+        }
+        .pause-overlay.active { display: flex; }
+
+        /* --- Result Stars --- */
+        .stars-container { font-size: 3rem; margin: 10px 0; color: #ddd; }
+        .stars-container .filled { color: #f1c40f; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
+        /* --- Footer Pill --- */
+        footer{
+            width: 100%;
+            padding: 10px 12px 28px;
+        }
+        .footer-pill{
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #f0f0f0;
+            border-radius: 999px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+        .footer-left, .footer-right{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+        }
+        .footer-dot{
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--brand-yellow);
+            box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.18);
+            flex-shrink: 0;
+        }
+        .footer-copy{
+            color: #666;
+            font-weight: 700;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 520px;
+        }
+        .footer-icon{
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            background: #fff;
+            flex-shrink: 0;
+        }
+        .footer-tagline{
+            color: var(--dark);
+            font-weight: 900;
+            font-size: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 420px;
+        }
+
+        /* --- RWD --- */
+        .game-input-area { 
+            display: flex; gap: 15px; align-items: center; 
+            justify-content: center; width: 100%; margin-top: 10px; 
+        }
+        @media (max-width: 600px) {
+            .hero-header { padding: 0 15px; height: 60px; }
+            .brand-text { font-size: 1.4rem; }
+            .nav-btn span { display: none; }
+            .container { margin: 10px; min-height: 80vh; }
+
+            footer{ padding: 6px 10px 18px; }
+            .footer-pill{
+                border-radius: 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .footer-copy, .footer-tagline{
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ✅ Hero 區改成截圖版本 -->
+    <div class="hero-header">
+        <div class="brand-area">
+            <div class="profile-circle"></div>
+            <div class="brand-text">Jessie Math</div>
+        </div>
+        <div class="nav-links">
+            <a href="https://jessiemath0703-chu.github.io/website2/" class="nav-btn">
+                <i class="fas fa-home"></i><span>首頁</span>
+            </a>
+            <a href="https://jessiemath0703-chu.github.io/Game-Lobby/" class="nav-btn">
+                <i class="fas fa-desktop"></i><span>遊戲大廳</span>
+            </a>
+            <a href="https://jessiemath0703-chu.github.io/Game-Lobby/#g6-u7" class="nav-btn nav-btn-outline">
+                <i class="fas fa-arrow-left"></i><span>六年級圓周長與扇形周長</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- 登入畫面 -->
+        <div id="screen-login" class="screen active" style="justify-content: center;">
+            <div style="font-size: 5rem; color: var(--primary); margin-bottom: 20px;"><i class="fas fa-rocket"></i></div>
+            <h1 style="color: var(--dark); font-family: 'Fredoka One'; margin-bottom:10px;">圓環之城・自由挑戰</h1>
+            <p style="color: #666; margin-bottom: 30px;">準備好你的圓周率了嗎？</p>
+            
+            <input type="text" id="username" class="input-box" placeholder="輸入名字" style="width:250px; font-size:1.2rem; font-weight:normal;" onkeydown="if(event.key==='Enter') goToMenu()">
+            <br>
+            <button class="btn" style="background: var(--primary); width: 200px;" onclick="goToMenu()">開始挑戰</button>
+        </div>
+
+        <!-- 主選單 -->
+        <div id="screen-menu" class="screen">
+            <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="text-align: left;">嗨，<span id="display-name" style="color:var(--primary)">Player</span>！</h2>
+                <div style="font-size: 0.9rem; color: #888;">選擇關卡開始</div>
+            </div>
+
+            <div class="level-grid">
+                <div class="level-card" onclick="selectLevel(1)" style="border-top: 5px solid var(--primary);">
+                    <i class="fas fa-circle-notch" style="color: var(--primary);"></i>
+                    <h3>L1. 旋轉市集</h3>
+                    <p>圓周長計算</p>
+                </div>
+                <div class="level-card" onclick="selectLevel(2)" style="border-top: 5px solid var(--success);">
+                    <i class="fas fa-pizza-slice" style="color: var(--success);"></i>
+                    <h3>L2. 時鐘守護者</h3>
+                    <p>扇形弧長計算</p>
+                </div>
+                <div class="level-card" onclick="selectLevel(3)" style="border-top: 5px solid var(--warning);">
+                    <i class="fas fa-chart-pie" style="color: var(--warning);"></i>
+                    <h3>L3. 披薩防禦戰</h3>
+                    <p>扇形周長計算</p>
+                </div>
+                <div class="level-card" onclick="selectLevel(4)" style="border-top: 5px solid var(--danger);">
+                    <i class="fas fa-dragon" style="color: var(--danger);"></i>
+                    <h3>L4. 圓形逃脫室</h3>
+                    <p>綜合混合題型</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; width: 100%; background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                <h4><i class="fas fa-trophy"></i> 你的榮譽榜 (本機)</h4>
+                <div id="leaderboard-preview" style="margin-top: 10px; min-height: 30px;"></div>
+                <button onclick="clearScore()" style="border:none; background:none; color:#999; font-size:0.8rem; margin-top:10px; cursor:pointer; text-decoration:underline;">清除紀錄</button>
+            </div>
+        </div>
+
+        <!-- 遊戲畫面 -->
+        <div id="screen-game" class="screen">
+            <div id="pause-overlay" class="pause-overlay">
+                <i class="fas fa-pause-circle" style="font-size: 5rem; color: var(--primary); margin-bottom: 20px;"></i>
+                <h2 style="font-size: 2rem;">遊戲暫停</h2>
+                <p style="margin-bottom: 30px;">休息是為了走更長遠的路</p>
+                <button class="btn" onclick="togglePause()" style="background: var(--primary); width: 160px;">繼續挑戰</button>
+                <button class="btn" onclick="quitGame()" style="background: #e74c3c; width: 160px;">結束本局</button>
+            </div>
+
+            <div class="hud">
+                <div class="hud-group">
+                    <div class="hud-item" style="color: #f39c12;"><i class="fas fa-star"></i> <span id="game-score">0</span></div>
+                    <div class="hud-item" style="color: var(--dark);"><i class="fas fa-clock"></i> <span id="game-time">60</span></div>
+                </div>
+                
+                <div class="hud-group">
+                    <div id="combo-display" class="hud-combo">Combo x<span id="combo-count">0</span></div>
+                    <div class="ctrl-btn" onclick="togglePause()" title="暫停"><i class="fas fa-pause"></i></div>
+                    <div class="ctrl-btn" onclick="inGameRestart()" title="重來"><i class="fas fa-redo"></i></div>
+                </div>
+            </div>
+            
+            <div class="timer-container"><div class="timer-bar" id="timer-bar"></div></div>
+
+            <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;">
+                <h2 id="q-text" style="margin-bottom: 10px; font-size: 1.5rem;">題目載入中...</h2>
+                
+                <div id="q-visual" class="visual-stage"></div>
+                
+                <div class="game-input-area">
+                    <input type="number" id="q-input" class="input-box" placeholder="?" autocomplete="off">
+                    <button class="btn" style="background: var(--primary); margin: 0; height: 60px; border-radius: 15px;" onclick="checkAnswer()">送出</button>
+                </div>
+
+                <div id="q-feedback" style="height: 40px; font-weight: bold; margin-top: 15px; font-size: 1.3rem;"></div>
+            </div>
+        </div>
+
+        <!-- 結算畫面 -->
+        <div id="screen-result" class="screen" style="justify-content: center;">
+            <h2 style="color: #666;">Time's Up!</h2>
+            
+            <div class="stars-container" id="result-stars">
+                <i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>
+            </div>
+            
+            <h1 style="font-size: 4rem; color: var(--primary); margin: 0; font-family: 'Fredoka One';"><span id="final-score">0</span> 分</h1>
+            <p style="color:#888; margin-bottom: 20px;">Max Combo: <span id="final-combo">0</span></p>
+            
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <button class="btn" onclick="goToMenu()" style="background: #666; width: 150px;">
+                    <i class="fas fa-list"></i> 回選單
+                </button>
+                <button class="btn" onclick="replayLevel()" style="background: var(--primary); width: 150px;">
+                    <i class="fas fa-redo"></i> 再玩一次
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ✅ 加入 Footer（膠囊條風格） -->
+    <footer>
+        <div class="footer-pill">
+            <div class="footer-left">
+                <div class="footer-dot" aria-hidden="true"></div>
+                <div class="footer-copy">© 2025–2026 Jessie Math 捷析老師. All rights reserved.</div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-icon" aria-hidden="true"><i class="fas fa-compass"></i></div>
+                <div class="footer-tagline">數學不迷路，Jessie 帶你走向理解。</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Game System ---
+        const Game = {
+            user: "Player",
+            level: 1,
+            score: 0,
+            timeLeft: 60,
+            timer: null,
+            q: null,
+            isPaused: false,
+            combo: 0,
+            maxCombo: 0,
+            isInputLocked: false
+        };
+
+        const LevelData = {
+            1: { title: "L1 旋轉市集", color: "#4a90e2", icon: "fa-circle-notch", contexts: ["摩天輪", "圓形廣場", "旋轉木馬"] },
+            2: { title: "L2 時鐘守護者", color: "#2ecc71", icon: "fa-pizza-slice", contexts: ["雷達掃描", "時鐘指針", "Wifi訊號"] },
+            3: { title: "L3 披薩防禦戰", color: "#f39c12", icon: "fa-chart-pie", contexts: ["切片披薩", "花園一角", "起司蛋糕"] },
+            4: { title: "L4 圓形逃脫室", color: "#e74c3c", icon: "fa-dragon", contexts: ["魔法陣", "逃生出口", "神祕符號"] }
+        };
+
+        // --- Navigation ---
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-' + id).classList.add('active');
+        }
+
+        function goToMenu() {
+            const nameInput = document.getElementById('username').value.trim();
+            if (nameInput) Game.user = nameInput;
+            document.getElementById('display-name').innerText = Game.user;
+            
+            updateLeaderboardDisplay();
+            showScreen('menu');
+        }
+
+        function selectLevel(lvl) {
+            Game.level = lvl;
+            startGame();
+        }
+
+        // --- Core Game Logic ---
+        function startGame() {
+            Game.score = 0;
+            Game.timeLeft = 60;
+            Game.combo = 0;
+            Game.maxCombo = 0;
+            Game.isPaused = false;
+            Game.isInputLocked = false;
+            
+            document.getElementById('pause-overlay').classList.remove('active');
+            document.getElementById('q-input').disabled = false;
+            document.getElementById('q-input').value = "";
+            document.getElementById('q-feedback').innerText = "";
+            
+            updateHUD();
+            showScreen('game');
+            nextQuestion();
+            
+            if (Game.timer) clearInterval(Game.timer);
+            Game.timer = setInterval(() => {
+                if (Game.isPaused) return; 
+
+                Game.timeLeft--;
+                updateHUD();
+                
+                if (Game.timeLeft <= 0) endGame();
+            }, 1000);
+        }
+
+        function inGameRestart() {
+            clearInterval(Game.timer);
+            startGame();
+        }
+
+        function quitGame() {
+            clearInterval(Game.timer);
+            showScreen('menu');
+        }
+
+        function replayLevel() {
+            startGame();
+        }
+
+        function togglePause() {
+            if (Game.timeLeft <= 0) return;
+            Game.isPaused = !Game.isPaused;
+            
+            const overlay = document.getElementById('pause-overlay');
+            const input = document.getElementById('q-input');
+
+            if (Game.isPaused) {
+                overlay.classList.add('active');
+                input.disabled = true;
+            } else {
+                overlay.classList.remove('active');
+                input.disabled = false;
+                input.focus();
+            }
+        }
+
+        function updateHUD() {
+            document.getElementById('game-score').innerText = Math.floor(Game.score);
+            document.getElementById('game-time').innerText = Game.timeLeft;
+            
+            const pct = (Game.timeLeft / 60) * 100;
+            const bar = document.getElementById('timer-bar');
+            bar.style.width = pct + "%";
+            bar.style.background = pct < 20 ? "#e74c3c" : "#2ecc71";
+
+            const comboEl = document.getElementById('combo-display');
+            const comboCnt = document.getElementById('combo-count');
+            if (Game.combo >= 2) {
+                comboEl.classList.add('show');
+                comboCnt.innerText = Game.combo;
+            } else {
+                comboEl.classList.remove('show');
+            }
+        }
+
+        // --- Math & Visuals ---
+        function nextQuestion() {
+            Game.isInputLocked = false;
+            const input = document.getElementById('q-input');
+            input.disabled = false;
+            input.value = "";
+            input.focus();
+            document.getElementById('q-feedback').innerHTML = "";
+
+            const r = getRandomInt(5, 15);
+            const angles = [45, 60, 90, 120, 135, 180, 270];
+            const angle = angles[Math.floor(Math.random() * angles.length)];
+            const pi = 3.14;
+            
+            const contexts = LevelData[Game.level].contexts;
+            const ctxText = contexts[Math.floor(Math.random() * contexts.length)];
+            const ctxIcon = getContextIcon(Game.level);
+
+            let q = { r: r, angle: angle, ans: 0, text: "", visual: "" };
+
+            if (Game.level === 1) { 
+                q.ans = Math.round(2 * r * pi * 100) / 100;
+                q.text = `半徑 ${r}，求圓周長？`;
+                q.visual = drawCircle(r, ctxText, ctxIcon);
+            } 
+            else if (Game.level === 2) { 
+                let arc = 2 * r * pi * (angle / 360);
+                q.ans = Math.round(arc * 100) / 100;
+                q.text = `半徑 ${r}，${angle}°，求弧長？`;
+                q.visual = drawSector(r, angle, false, ctxText, ctxIcon);
+            } 
+            else if (Game.level === 3) { 
+                let arc = 2 * r * pi * (angle / 360);
+                q.ans = Math.round((arc + 2 * r) * 100) / 100;
+                q.text = `半徑 ${r}，${angle}°，求扇形周長？`;
+                q.visual = drawSector(r, angle, true, ctxText, ctxIcon);
+            }
+            else {
+                if (Math.random() > 0.5) {
+                    let arc = 2 * r * pi * (angle / 360);
+                    q.ans = Math.round((arc + 2 * r) * 100) / 100;
+                    q.text = `(Boss) 半徑 ${r}，${angle}°，求周長？`;
+                    q.visual = drawSector(r, angle, true, "陷阱題", "fa-skull");
+                } else {
+                    q.ans = Math.round(2 * r * pi * 100) / 100;
+                    q.text = `(Boss) 直徑 ${r*2}，求圓周長？`;
+                    q.visual = drawCircle(r, "直徑注意", "fa-exclamation-circle");
+                }
+            }
+
+            Game.q = q;
+            document.getElementById('q-text').innerText = q.text;
+            document.getElementById('q-visual').innerHTML = q.visual;
+        }
+
+        function drawCircle(r, tag, icon) {
+            return `<div class="shape-circle">
+                        <div class="context-tag"><i class="fas ${icon}"></i> ${tag}</div>
+                        <span class="shape-label" style="top:50%; left:50%; transform:translate(-50%,-50%)">r=${r}</span>
+                    </div>`;
+        }
+
+        function drawSector(r, angle, isPerimeter, tag, icon) {
+            let color = isPerimeter ? LevelData[3].color : LevelData[2].color;
+            let border = isPerimeter ? '4px solid #333' : '1px solid #ccc'; 
+            return `<div class="shape-sector" style="--angle:${angle}deg; --fill-color:${color}; border:${border}">
+                        <div class="context-tag"><i class="fas ${icon}"></i> ${tag}</div>
+                        <span class="shape-label" style="bottom:20px; right:20px;">r=${r}</span>
+                        <span class="shape-label" style="top:0; left:0;">${angle}°</span>
+                    </div>`;
+        }
+
+        function getContextIcon(lvl) {
+            if (lvl == 1) return "fa-dharmachakra";
+            if (lvl == 2) return "fa-clock";
+            if (lvl == 3) return "fa-pizza-slice";
+            return "fa-star";
+        }
+
+        function checkAnswer() {
+            if (Game.isPaused || Game.isInputLocked) return; 
+
+            const inputEl = document.getElementById('q-input');
+            const inputVal = inputEl.value;
+            if (inputVal === "") return;
+            
+            const val = parseFloat(inputVal);
+            const feedback = document.getElementById('q-feedback');
+            
+            Game.isInputLocked = true;
+            inputEl.disabled = true;
+
+            if (Math.abs(val - Game.q.ans) <= 0.5) {
+                Game.combo++;
+                if (Game.combo > Game.maxCombo) Game.maxCombo = Game.combo;
+                
+                let pts = 100 + (Game.combo * 20); 
+                Game.score += pts;
+                
+                feedback.innerHTML = `<span style="color:#2ecc71"><i class="fas fa-check"></i> 正確！+${pts}</span>`;
+                updateHUD();
+                
+                setTimeout(nextQuestion, 600);
+            } else {
+                Game.combo = 0;
+                updateHUD();
+                feedback.innerHTML = `<span style="color:#e74c3c"><i class="fas fa-times"></i> 錯誤。答案是 ${Game.q.ans}</span>`;
+                
+                setTimeout(nextQuestion, 1500);
+            }
+        }
+
+        function getRandomInt(min, max) { 
+            return Math.floor(Math.random() * (max - min + 1)) + min; 
+        }
+
+        // --- Result Logic ---
+        function endGame() {
+            clearInterval(Game.timer);
+            showScreen('result');
+            
+            document.getElementById('final-score').innerText = Math.floor(Game.score);
+            document.getElementById('final-combo').innerText = Game.maxCombo;
+            
+            let stars = 0;
+            if (Game.score > 0) stars = 1;
+            if (Game.score > 1500) stars = 2;
+            if (Game.score > 3000) stars = 3;
+            
+            let starHTML = "";
+            for (let i = 1; i <= 3; i++) {
+                if (i <= stars) starHTML += '<i class="fas fa-star filled"></i>';
+                else starHTML += '<i class="far fa-star"></i>';
+            }
+            document.getElementById('result-stars').innerHTML = starHTML;
+
+            saveScore();
+        }
+
+        function saveScore() {
+            let data = JSON.parse(localStorage.getItem('jessieMath_v4')) || [];
+            if (Game.score > 0) {
+                data.push({ name: Game.user, score: Math.floor(Game.score), lvl: Game.level });
+                data.sort((a,b) => b.score - a.score);
+                data = data.slice(0, 5); 
+                localStorage.setItem('jessieMath_v4', JSON.stringify(data));
+            }
+        }
+
+        function updateLeaderboardDisplay() {
+            let data = JSON.parse(localStorage.getItem('jessieMath_v4')) || [];
+            let html = "";
+            data.forEach((d, i) => {
+                let icon = i === 0 ? "🥇" : (i === 1 ? "🥈" : "🥉");
+                if (i > 2) icon = `${i+1}.`;
+                html += `<div style="display:flex; justify-content:space-between; border-bottom:1px solid #eee; padding:8px;">
+                            <span>${icon} ${d.name} <small>(L${d.lvl})</small></span>
+                            <b>${d.score}</b>
+                         </div>`;
+            });
+            if (html === "") html = "<div style='color:#ccc; padding:10px;'>尚無紀錄</div>";
+            document.getElementById('leaderboard-preview').innerHTML = html;
+        }
+
+        function clearScore() {
+            if (confirm("清除紀錄？")) {
+                localStorage.removeItem('jessieMath_v4');
+                updateLeaderboardDisplay();
+            }
+        }
+
+        // Init：讓輸入框可以用 Enter 送出
+        document.getElementById('q-input').addEventListener("keypress", function(event) {
+            if (event.key === "Enter") checkAnswer();
+        });
+    </script>
+</body>
+</html>
